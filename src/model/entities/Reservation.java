@@ -9,17 +9,17 @@ import static java.util.concurrent.TimeUnit.DAYS;
 public class Reservation {
     private int roomNumber;
     private Date checkIn;
-    private Date checkout;
+    private Date checkOut;
 
-    private static SimpleDateFormat sdf = new SimpleDateFormat(("dd/MM/yyyy"));
+    private static final SimpleDateFormat sdf = new SimpleDateFormat(("dd/MM/yyyy"));
 
     public Reservation() {
     }
 
-    public Reservation(int roomNumber, Date checkIn, Date checkout) {
+    public Reservation(int roomNumber, Date checkIn, Date checkOut) {
         this.roomNumber = roomNumber;
         this.checkIn = checkIn;
-        this.checkout = checkout;
+        this.checkOut = checkOut;
     }
 
     public Date getCheckIn() {
@@ -28,7 +28,7 @@ public class Reservation {
 
 
     public Date getCheckout() {
-        return checkout;
+        return checkOut;
     }
 
 
@@ -41,13 +41,20 @@ public class Reservation {
     }
 
     public long duration() {
-        long diff = checkout.getTime() - checkIn.getTime();
+        long diff = checkOut.getTime() - checkIn.getTime();
         return DAYS.convert(diff, TimeUnit.MILLISECONDS);
     }
 
-    public void updateDates(Date checkIn, Date checkout) {
+    public String updateDates(Date checkIn, Date checkOut) {
+        Date now = new Date();
+        if (checkOut.before(now) || checkIn.before(now)) {
+            return "Reservation dates for update must be future dates";
+        } if ((!checkIn.before(checkOut))) {
+            return "Reservation dates for update must be future dates";
+        }
         this.checkIn = checkIn;
-        this.checkout = checkout;
+        this.checkOut = checkOut;
+        return null;
     }
 
     @Override
@@ -56,8 +63,8 @@ public class Reservation {
                 + roomNumber
                 + ", checkIn: "
                 + sdf.format(checkIn)
-                + " , checkout: "
-                + sdf.format(checkout)
+                + " , checkOut: "
+                + sdf.format(checkOut)
                 + " ,"
                 + duration()
                 + " nights";
