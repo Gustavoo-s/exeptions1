@@ -39,6 +39,7 @@ public class Main {
             } else {
                 reservation = new Reservation(roomNumber,checkIn, checkOut);
                 System.out.println("Reservation " + reservation);
+                System.out.println("Olá, testetando git");
             }
         }
     }
